@@ -39,10 +39,24 @@ class ForecastOverride(db.Model):
 
 
 # --- ルート関数 ---
+# app.py の中の index 関数
+
 @app.route('/')
 def index():
-    items = Inventory.query.order_by(Inventory.item_name).all()
-    return render_template('index.html', items=items)
+    # URLから検索キーワード('q')を取得します。
+    search_query = request.args.get('q', '')
+    
+    # 全ての在庫を取得するクエリを準備
+    query = Inventory.query.order_by(Inventory.item_name)
+    
+    # もし検索キーワードが存在すれば、絞り込み条件を追加
+    if search_query:
+        query = query.filter(Inventory.item_name.contains(search_query))
+    
+    # 最終的なクエリを実行して結果を取得
+    items = query.all()
+    
+    return render_template('index.html', items=items, search_query=search_query)
 
 @app.route('/add', methods=['GET', 'POST'])
 def add():

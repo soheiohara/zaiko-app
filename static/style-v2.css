@@ -155,3 +155,63 @@ input[type="text"], input[type="number"], select {
         margin-bottom: 0.5em;
     }
 }
+/* --- ▼▼▼ ナビゲーションバーのスタイル ▼▼▼ --- */
+.navbar {
+    background-color: #343a40;
+    padding: 1rem;
+    border-bottom: 3px solid #007bff;
+}
+.navbar .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.navbar-brand {
+    color: #fff;
+    font-size: 1.5em;
+    font-weight: bold;
+    text-decoration: none;
+}
+.navbar-nav {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+.navbar-nav li {
+    margin-left: 15px;
+}
+.navbar-nav a {
+    color: #f8f9fa;
+    text-decoration: none;
+    font-size: 1em;
+}
+.navbar-nav a:hover {
+    color: #007bff;
+}
+
+/* --- ▼▼▼ メインコンテンツとフッターのスタイル ▼▼▼ --- */
+main.container {
+    margin-top: 2em;
+    margin-bottom: 4em;
+}
+.footer {
+    background-color: #f8f9fa;
+    color: #6c757d;
+    padding: 2em 0;
+    border-top: 1px solid #dee2e6;
+    text-align: center;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}
+
+/* スマホ用のナビゲーションバースタイル */
+@media (max-width: 768px) {
+    .navbar .container {
+        flex-direction: column;
+    }
+    .navbar-brand {
+        margin-bottom: 1em;
+    }
+}

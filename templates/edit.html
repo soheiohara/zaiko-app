@@ -1,44 +1,41 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <title>資材の編集</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
+{% extends "base.html" %}
+
+{% block title %}資材の編集{% endblock %}
+
+{% block content %}
     <h1>資材の編集</h1>
     <form method="post">
         <div class="form-group">
             <label>資材名</label>
-            <input type="text" name="item_name" value="{{ item['item_name'] }}" required>
+            <input type="text" name="item_name" value="{{ item.item_name }}" required>
         </div>
         <div class="form-group">
             <label>在庫数</label>
-            <input type="number" name="quantity" value="{{ item['quantity'] }}" required>
+            <input type="number" name="quantity" value="{{ item.quantity }}" required>
         </div>
         <div class="form-group">
             <label>保管場所</label>
-            <input type="text" name="location" value="{{ item['location'] }}">
+            <input type="text" name="location" value="{{ item.location or '' }}">
         </div>
         <div class="form-group">
             <label>下限の閾値</label>
-            <input type="number" name="lower_threshold" value="{{ item['lower_threshold'] or '' }}">
+            <input type="number" name="lower_threshold" value="{{ item.lower_threshold or '' }}">
         </div>
         <div class="form-group">
             <label>上限の閾値</label>
-            <input type="number" name="upper_threshold" value="{{ item['upper_threshold'] or '' }}">
+            <input type="number" name="upper_threshold" value="{{ item.upper_threshold or '' }}">
         </div>
         <div class="form-group">
             <label>備考</label>
-            <input type="text" name="notes" value="{{ item['notes'] }}">
+            <input type="text" name="notes" value="{{ item.notes or '' }}">
         </div>
-        <button type="submit" class="btn">更新する</button>
-    <hr>
+
+        <hr>
         <h3>定期納品ルール</h3>
         <div class="form-group">
             <label>納品間隔</label>
             <select name="delivery_interval">
-                <option value="NONE" {% if item.delivery_interval == 'NONE' %}selected{% endif %}>なし</option>
+                <option value="NONE" {% if item.delivery_interval == 'NONE' or item.delivery_interval == None %}selected{% endif %}>なし</option>
                 <option value="WEEKLY" {% if item.delivery_interval == 'WEEKLY' %}selected{% endif %}>毎週</option>
                 <option value="BIWEEKLY" {% if item.delivery_interval == 'BIWEEKLY' %}selected{% endif %}>隔週</option>
             </select>
@@ -58,8 +55,8 @@
         <div class="form-group">
             <label>納品数</label>
             <input type="number" name="delivery_amount" value="{{ item.delivery_amount or '' }}">
-        </div></form>
-    <hr>
-    <a href="{{ url_for('index') }}">在庫一覧に戻る</a>
-</body>
-</html>
+        </div>
+
+        <button type="submit" class="btn">更新する</button>
+    </form>
+{% endblock %}

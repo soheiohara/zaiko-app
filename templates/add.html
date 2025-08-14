@@ -1,14 +1,10 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <title>新しい資材を登録</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style-v2.css') }}">
-</head>
-<body>
+{% extends "base.html" %}
+
+{% block title %}新しい資材の登録{% endblock %}
+
+{% block content %}
     <h1>新しい資材を登録</h1>
-    <form method="post">
+    <form method="post" action="{{ url_for('add') }}">
         <div class="form-group">
             <label for="item_name">資材名</label>
             <input type="text" name="item_name" required>
@@ -33,9 +29,34 @@
             <label for="notes">備考</label>
             <input type="text" name="notes">
         </div>
+
+        <hr>
+        <h3>定期納品ルール</h3>
+        <div class="form-group">
+            <label>納品間隔</label>
+            <select name="delivery_interval">
+                <option value="NONE" selected>なし</option>
+                <option value="WEEKLY">毎週</option>
+                <option value="BIWEEKLY">隔週</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>納品曜日</label>
+            <select name="delivery_day">
+                <option value="0">月曜日</option>
+                <option value="1">火曜日</option>
+                <option value="2" selected>水曜日</option>
+                <option value="3">木曜日</option>
+                <option value="4">金曜日</option>
+                <option value="5">土曜日</option>
+                <option value="6">日曜日</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>納品数</label>
+            <input type="number" name="delivery_amount">
+        </div>
+
         <button type="submit" class="btn">登録する</button>
     </form>
-    <hr>
-    <a href="{{ url_for('index') }}">在庫一覧に戻る</a>
-</body>
-</html>
+{% endblock %}

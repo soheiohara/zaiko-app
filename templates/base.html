@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}在庫管理アプリ{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style-v2.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('index') }}">資材管理システム</a>
+            <ul class="navbar-nav">
+                <li><a href="{{ url_for('index') }}">在庫一覧</a></li>
+                <li><a href="{{ url_for('forecast') }}">予測ダッシュボード</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 在庫管理アプリ</p>
+        </div>
+    </footer>
+</body>
+</html>
