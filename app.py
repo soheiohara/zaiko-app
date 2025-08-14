@@ -234,9 +234,6 @@ def secret_db_init():
     return redirect(url_for('index'))
 # --- ▲▲▲ ここまでを追加 ▲▲▲ ---
 
-
-if __name__ == '__main__':
-    # ... (以降のコードは変更なし)
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
