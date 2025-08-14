@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>資材 在庫管理アプリ</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style-v2.css') }}">
 </head>
 <body>
     <h1>資材 在庫一覧</h1>
@@ -21,6 +22,7 @@
     <a href="{{ url_for('add') }}">新しい資材を登録する</a>
     <a href="{{ url_for('forecast') }}" style="margin-left: 20px;">予測ダッシュボードへ</a>
     
+<div class="table-container">    
     <table>
         <thead>
             <tr>
@@ -59,5 +61,6 @@
             {% endfor %}
         </tbody>
     </table>
+</div>
 </body>
 </html>

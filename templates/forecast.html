@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>予測ダッシュボード</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style-v2.css') }}">
 </head>
 <body>
     <h1>インタラクティブ予測カレンダー</h1>
@@ -26,7 +27,8 @@
 
         <h3>消費予定数を入力してください</h3>
         <p>日ごとの発送予定数をカレンダーに入力し、「再計算」ボタンを押してください。</p>
-        
+
+<div class="table-container">        
         <table>
             <thead>
                 <tr>
@@ -59,6 +61,7 @@
                 {% endfor %}
             </tbody>
         </table>
+</div>
         <br>
         <button type="submit" class="btn">再計算して予測を更新</button>
     </form>
