@@ -37,21 +37,28 @@ class ForecastOverride(db.Model):
     __table_args__ = (db.UniqueConstraint('item_id', 'forecast_date'),)
 
 
-# --- ルート関数 (変更なし) ---
-# ... (index, add, edit, delete, update, forecast 関数は変更なし)
 @app.route('/')
 def index():
     try:
+        # URLから検索キーワード('q')を取得します。なければ空文字''になります。
         search_query = request.args.get('q', '')
+        
+        # 全ての在庫を取得するクエリを準備
         query = Inventory.query.order_by(Inventory.item_name)
+        
+        # もし検索キーワードが存在すれば、絞り込み条件を追加
         if search_query:
+            # item_nameにsearch_queryの文字列が含まれるものをフィルタリング
             query = query.filter(Inventory.item_name.contains(search_query))
+        
+        # 最終的なクエリを実行して結果を取得
         items = query.all()
+        
         return render_template('index.html', items=items, search_query=search_query)
-    except Exception as e:
-        flash(f"データベースの準備ができていない可能性があります。「秘密のURL」にアクセスして初期化してください。エラー: {e}", "error")
-        return render_template('index.html', items=[], search_query='')
 
+    except Exception as e:
+        flash(f"データベースエラーが発生しました。アプリを再起動するか、管理者にご連絡ください。エラー: {e}", "error")
+        return render_template('index.html', items=[], search_query='')
 # ... (add, edit, delete, update, forecast...などの関数も同様に、次のステップで書き換えます)
 @app.route('/add', methods=['GET', 'POST'])
 def add():
