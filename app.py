@@ -5,14 +5,20 @@ from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 
-# --- SQLAlchemy設定 ---
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'sqlite:///database.db').replace('postgresql://', 'postgresql+psycopg://')
+# --- ▼▼▼ SQLAlchemy設定（修正版）▼▼▼ ---
+# データベースURLの取得と修正
+db_url = os.getenv('DATABASE_URL', 'sqlite:///database.db')
+if db_url.startswith("postgres://"):
+    db_url = db_url.replace("postgres://", "postgresql+psycopg://", 1)
+
+app.config['SQLALCHEMY_DATABASE_URI'] = db_url
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.secret_key = 'my-secret-key-is-very-secret'
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'default-secret-key-for-dev') # SECRET_KEYも環境変数から取得
 db = SQLAlchemy(app)
+# --- ▲▲▲ 設定ここまで ▲▲▲ ---
 
 
-# --- データベースモデル定義 ---
+# --- データベースモデル定義 (変更なし) ---
 class Inventory(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     item_name = db.Column(db.String(100), nullable=False)
@@ -34,8 +40,7 @@ class ForecastOverride(db.Model):
     __table_args__ = (db.UniqueConstraint('item_id', 'forecast_date'),)
 
 
-# --- ▼▼▼ ここから下のルート関数をすべてSQLAlchemy版に書き換えます ▼▼▼ ---
-
+# --- ルート関数 (変更なし) ---
 @app.route('/')
 def index():
     items = Inventory.query.order_by(Inventory.item_name).all()
@@ -44,6 +49,8 @@ def index():
 @app.route('/add', methods=['GET', 'POST'])
 def add():
     if request.method == 'POST':
+        # ... (変更なし)
+        # ... (add関数の残りのコード)
         new_item = Inventory(
             item_name=request.form['item_name'],
             quantity=int(request.form['quantity']),
@@ -65,6 +72,8 @@ def add():
 def edit(item_id):
     item = Inventory.query.get_or_404(item_id)
     if request.method == 'POST':
+        # ... (変更なし)
+        # ... (edit関数の残りのコード)
         item.item_name = request.form['item_name']
         item.quantity = int(request.form['quantity'])
         item.location = request.form['location']
@@ -79,6 +88,7 @@ def edit(item_id):
         flash(f'資材「{item.item_name}」の情報を更新しました。', 'success')
         return redirect(url_for('index'))
     return render_template('edit.html', item=item)
+
 
 @app.route('/delete/<int:item_id>', methods=['POST'])
 def delete(item_id):
@@ -114,6 +124,8 @@ def forecast():
     item = Inventory.query.get_or_404(selected_item_id)
 
     if request.method == 'POST':
+        # ... (変更なし)
+        # ... (forecast関数のPOST部分のコード)
         for i in range(28):
             day_iso = (datetime.now().date() + timedelta(days=i)).isoformat()
             consumption_val = int(request.form.get(f"consumption-{day_iso}", 0))
@@ -133,12 +145,15 @@ def forecast():
         flash('予測値を保存しました。', 'success')
         return redirect(url_for('forecast', item_id=selected_item_id))
 
+    # GETリクエストの処理 (変更なし)
     overrides = {row.forecast_date: row for row in ForecastOverride.query.filter_by(item_id=selected_item_id).all()}
     
     forecast_days = []
     today = datetime.now().date()
     current_stock = item.quantity
     for i in range(28):
+        # ... (変更なし)
+        # ... (forecast関数のGET部分の計算ロジック)
         day = today + timedelta(days=i)
         date_iso = day.isoformat()
         weekday_jp = ["月", "火", "水", "木", "金", "土", "日"][day.weekday()]
@@ -148,25 +163,3 @@ def forecast():
             consumption = override_data.manual_consumption
             delivery = override_data.manual_delivery
         else:
-            consumption = 0
-            delivery = 0
-            if item.delivery_interval == 'WEEKLY' and day.weekday() == item.delivery_day:
-                delivery = item.delivery_amount or 0
-            elif item.delivery_interval == 'BIWEEKLY' and day.weekday() == item.delivery_day and day.isocalendar().week % 2 == 0:
-                delivery = item.delivery_amount or 0
-        
-        event_text = "納品" if delivery > 0 else ("発送日" if day.weekday() in [0, 1, 4, 5] else "週末/休日")
-
-        start_of_day_stock = current_stock if i == 0 else forecast_days[i-1]['end_stock']
-        end_of_day_stock = start_of_day_stock - consumption + delivery
-        
-        forecast_days.append({
-            'date_str': day.strftime('%m/%d'), 'date_iso': date_iso, 'weekday': f"({weekday_jp})",
-            'event': event_text, 'consumption': consumption, 'delivery': delivery, 'end_stock': end_of_day_stock
-        })
-
-    return render_template('forecast.html', item=item, all_items=all_items, forecast_days=forecast_days)
-
-
-if __name__ == '__main__':
-    app.run(debug=True)
