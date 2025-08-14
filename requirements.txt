@@ -11,4 +11,4 @@ typing-extensions
 tzdata
 Werkzeug
 gunicorn
-psycopg2-binary==2.9.9
+psycopg
