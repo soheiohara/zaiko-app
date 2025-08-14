@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>新しい資材を登録</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>新しい資材を登録</h1>
+    <form method="post">
+        <div class="form-group">
+            <label for="item_name">資材名</label>
+            <input type="text" name="item_name" required>
+        </div>
+        <div class="form-group">
+            <label for="quantity">初期在庫数</label>
+            <input type="number" name="quantity" required>
+        </div>
+        <div class="form-group">
+            <label for="location">保管場所</label>
+            <input type="text" name="location">
+        </div>
+        <div class="form-group">
+            <label for="lower_threshold">下限の閾値（発注点）</label>
+            <input type="number" name="lower_threshold">
+        </div>
+        <div class="form-group">
+            <label for="upper_threshold">上限の閾値（キャンセル点）</label>
+            <input type="number" name="upper_threshold">
+        </div>
+        <div class="form-group">
+            <label for="notes">備考</label>
+            <input type="text" name="notes">
+        </div>
+        <button type="submit" class="btn">登録する</button>
+    </form>
+    <hr>
+    <a href="{{ url_for('index') }}">在庫一覧に戻る</a>
+</body>
+</html>

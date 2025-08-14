@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>予測ダッシュボード</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>インタラクティブ予測カレンダー</h1>
+    
+    <form method="get" action="{{ url_for('forecast') }}" class="form-group">
+        <label for="item_id">予測する資材を選択してください</label>
+        <select name="item_id" onchange="this.form.submit()">
+            {% for an_item in all_items %}
+                <option value="{{ an_item.id }}" {% if an_item.id == item.id %}selected{% endif %}>
+                    {{ an_item.item_name }}
+                </option>
+            {% endfor %}
+        </select>
+    </form>
+    <h2 style="color: #333;">予測対象： {{ item.item_name }} （現在庫：{{ item.quantity }}）</h2>
+    <hr>
+    
+    <form method="post" action="{{ url_for('forecast') }}">
+        <input type="hidden" name="item_id" value="{{ item.id }}">
+
+        <h3>消費予定数を入力してください</h3>
+        <p>日ごとの発送予定数をカレンダーに入力し、「再計算」ボタンを押してください。</p>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>日付</th>
+                    <th>曜日</th>
+                    <th>イベント</th>
+                    <th>消費予定 (手入力)</th>
+                    <th>納品 (自動)</th>
+                    <th>期末在庫予測 (自動計算)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for day in forecast_days %}
+                
+                {% set row_class = '' %}
+                {% if item.lower_threshold is not none and day.end_stock <= item.lower_threshold %}
+                    {% set row_class = 'danger' %}
+                {% elif item.upper_threshold is not none and day.end_stock >= item.upper_threshold %}
+                    {% set row_class = 'warning' %}
+                {% endif %}
+
+                <tr class="{{ row_class }}">
+                    <td>{{ day.date_str }}</td>
+                    <td>{{ day.weekday }}</td>
+                    <td>{{ day.event }}</td>
+                    <td><input type="number" name="consumption-{{ day.date_iso }}" value="{{ day.consumption }}" class="input-small"></td>
+                    <td><input type="number" name="delivery-{{ day.date_iso }}" value="{{ day.delivery }}" class="input-small"></td>
+                    <td><strong>{{ day.end_stock }}</strong></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <br>
+        <button type="submit" class="btn">再計算して予測を更新</button>
+    </form>
+    
+    <hr>
+    <a href="{{ url_for('index') }}">在庫一覧に戻る</a>
+</body>
+</html>

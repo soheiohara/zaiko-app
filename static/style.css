@@ -1,0 +1,114 @@
+/* 全体の基本スタイル */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background-color: #f4f7f6; /* 少しグレーがかった背景色 */
+    color: #333;
+    margin: 0;
+    padding: 2em;
+}
+
+/* メインコンテンツのコンテナ */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2em;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+h1, h2 {
+    color: #2c3e50;
+    border-bottom: 2px solid #e0e0e0;
+    padding-bottom: 0.5em;
+}
+
+a {
+    color: #007bff;
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
+
+/* テーブルのスタイル */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1.5em;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+    vertical-align: middle;
+}
+
+th {
+    background-color: #f9f9f9;
+    font-weight: 600;
+}
+
+tr:nth-child(even) {
+    background-color: #fdfdfd;
+}
+
+/* 行の警告色スタイル */
+.danger { background-color: #ffebee !important; }
+.warning { background-color: #e3f2fd !important; }
+
+/* メッセージのスタイル */
+.message {
+    padding: 15px;
+    margin: 1em 0;
+    border-radius: 4px;
+    border: 1px solid transparent;
+}
+.message.success { background-color: #d4edda; color: #155724; border-color: #c3e6cb; }
+.message.error   { background-color: #f8d7da; color: #721c24; border-color: #f5c6cb; }
+.message.info    { background-color: #d1ecf1; color: #0c5460; border-color: #bee5eb; }
+
+/* ボタンのスタイル */
+.btn, button {
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: background-color 0.2s ease-in-out;
+}
+.btn:hover, button:hover {
+    background-color: #0056b3;
+}
+
+.btn-edit { background-color: #ffc107; color: black; }
+.btn-edit:hover { background-color: #e0a800; }
+
+.btn-delete { background-color: #dc3545; color: white; }
+.btn-delete:hover { background-color: #c82333; }
+
+/* フォーム要素のスタイル */
+input[type="text"], input[type="number"], select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box; /* paddingを含めてwidthを100%にする */
+}
+
+.input-small {
+    width: 80px;
+    padding: 4px;
+}
+
+.form-group {
+    margin-bottom: 1.5em;
+}
+label {
+    display: block;
+    margin-bottom: 0.5em;
+    font-weight: 600;
+}

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>資材 在庫管理アプリ</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>資材 在庫一覧</h1>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="messages">
+        {% for category, message in messages %}
+          <div class="message {{ category }}">{{ message }}</div>
+        {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <a href="{{ url_for('add') }}">新しい資材を登録する</a>
+    <a href="{{ url_for('forecast') }}" style="margin-left: 20px;">予測ダッシュボードへ</a>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>資材名</th>
+                <th>在庫数</th>
+                <th>保管場所</th>
+                <th>備考</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+            {% set row_class = '' %}
+            {% if item.lower_threshold is not none and item.quantity <= item.lower_threshold %}
+                {% set row_class = 'danger' %}
+            {% elif item.upper_threshold is not none and item.quantity >= item.upper_threshold %}
+                {% set row_class = 'warning' %}
+            {% endif %}
+            <tr class="{{ row_class }}">
+                <td>{{ item['item_name'] }}</td>
+                <td><strong>{{ item['quantity'] }}</strong></td>
+                <td>{{ item['location'] }}</td>
+                <td>{{ item['notes'] }}</td>
+                <td class="actions">
+                    <form action="{{ url_for('update', item_id=item.id) }}" method="post" style="display: inline-block; margin-right: 10px;">
+                        <input type="number" name="change" value="1" style="width: 60px; padding: 4px;">
+                        <button type="submit">数量更新</button>
+                    </form>
+                    
+                    <a href="{{ url_for('edit', item_id=item.id) }}" class="btn-edit">編集</a>
+                    <form action="{{ url_for('delete', item_id=item.id) }}" method="post" style="display: inline-block;">
+                        <button type="submit" class="btn-delete" onclick="return confirm('「{{ item.item_name }}」を本当に削除しますか？');">削除</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
