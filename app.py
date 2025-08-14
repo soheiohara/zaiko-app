@@ -188,6 +188,39 @@ def forecast():
         })
     return render_template('forecast.html', item=item, all_items=all_items, forecast_days=forecast_days)
 
+# --- ▼▼▼ データベース初期化用の秘密のルート ▼▼▼ ---
+@app.route('/_internal_db_init_command_f9a8b7c6d5e4')
+def secret_db_init():
+    try:
+        with app.app_context():
+            db.drop_all() # 既存のテーブルを全て削除
+            db.create_all() # 新しいテーブルを全て作成
+
+            # init_db.pyから初期データをここに移動
+            initial_inventory = [
+                Inventory(item_name='発送用ダンボール 100サイズ', quantity=500, lower_threshold=200, upper_threshold=1000, 
+                          notes='隔週納品。在庫数に応じて要調整。', location='A棚-1段目', 
+                          delivery_interval='BIWEEKLY', delivery_day=2, delivery_amount=800),
+                Inventory(item_name='発送用ダンボール 160サイズ', quantity=2000, lower_threshold=1000, upper_threshold=3000, 
+                          notes='毎週1500枚納品。在庫過多に注意。', location='B棚-1段目', 
+                          delivery_interval='WEEKLY', delivery_day=2, delivery_amount=1500),
+                Inventory(item_name='発送用ダンボール 200サイズ', quantity=100, lower_threshold=50, upper_threshold=300, 
+                          notes='在庫が下限近くになったらメール発注。', location='B棚-2段目', 
+                          delivery_interval='NONE', delivery_day=None, delivery_amount=None)
+            ]
+            db.session.bulk_save_objects(initial_inventory)
+            db.session.commit()
+
+        flash("データベースが正常に初期化されました！")
+    except Exception as e:
+        flash(f"データベース初期化中にエラーが発生しました: {e}")
+
+    return redirect(url_for('index'))
+# --- ▲▲▲ ここまでを追加 ▲▲▲ ---
+
+
+if __name__ == '__main__':
+    # ... (以降のコードは変更なし)
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
