@@ -112,3 +112,69 @@ label {
     margin-bottom: 0.5em;
     font-weight: 600;
 }
+/* --- ▼▼▼ レスポンシブ対応（スマホ用スタイル）▼▼▼ --- */
+
+/* テーブルを横スクロール可能にするためのコンテナ */
+.table-container {
+    overflow-x: auto;
+    width: 100%;
+}
+/* --- ▼▼▼ レスポンシブ対応（スマホ用スタイル）▼▼▼ --- */
+
+/* テーブルを横スクロール可能にするためのコンテナ */
+.table-container {
+    overflow-x: auto;
+    width: 100%;
+    -webkit-overflow-scrolling: touch; /* iOSでのスクロールを滑らかにする */
+}
+
+/* 画面幅が768px以下（タブレットやスマホ）の場合に適用 */
+@media (max-width: 768px) {
+    /* ページの基準となる文字サイズを少し大きくする */
+    html {
+        font-size: 16px; 
+    }
+
+    /* 全体の余白を調整 */
+    body {
+        padding: 0.5em;
+        -webkit-text-size-adjust: 100%; /* iOSでの勝手な文字サイズ調整を防ぐ */
+    }
+    .container {
+        padding: 1em;
+        box-shadow: none; /* スマホでは影をなくしてスッキリさせる */
+    }
+
+    /* 見出しの文字サイズを調整 */
+    h1 { font-size: 1.6rem; }
+    h2 { font-size: 1.3rem; }
+
+    /* テーブルの文字を大きく、余白を広くする */
+    th, td {
+        font-size: 0.95rem;
+        padding: 14px 8px; /* 上下の余白を広く、左右を少し狭く */
+    }
+
+    /* フォーム要素を画面幅いっぱいにし、文字も大きくする */
+    input[type="text"], 
+    input[type="number"], 
+    select,
+    .btn,
+    button {
+        width: 100%;
+        box-sizing: border-box;
+        font-size: 1rem; /* 文字サイズを基準に合わせる */
+        padding: 12px;   /* ボタンや入力欄を高くして押しやすくする */
+    }
+
+    /* 操作ボタンが縦に並ぶように調整 */
+    .actions form {
+        display: block;
+        margin-bottom: 0.5em;
+    }
+    .actions .btn-edit {
+        display: block;
+        text-align: center;
+        margin-bottom: 0.5em;
+    }
+}
