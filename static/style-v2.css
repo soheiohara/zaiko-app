@@ -4,7 +4,7 @@ body {
     background-color: #f4f7f6;
     color: #333;
     margin: 0;
-    padding: 2em;
+    padding-top: 80px; /* 固定ナビゲーションバーの高さ分、余白を確保 */
 }
 
 .container {
@@ -30,29 +30,70 @@ a:hover {
     text-decoration: underline;
 }
 
+/* --- ▼▼▼ ナビゲーションバーのスタイル ▼▼▼ --- */
+.navbar {
+    background-color: #fff;
+    padding: 1rem;
+    border-bottom: 1px solid #e7e7e7;
+    position: fixed; /* 画面上部に固定 */
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+.navbar .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 2em; /* コンテナの左右パディングを調整 */
+}
+.navbar-brand {
+    color: #343a40; /* ブランド名を濃いグレーに */
+    font-size: 1.5em;
+    font-weight: bold;
+    text-decoration: none;
+}
+.navbar-nav {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+.navbar-nav li {
+    margin-left: 20px;
+}
+.navbar-nav a {
+    color: #555; /* リンクの色を少し濃いグレーに */
+    text-decoration: none;
+    font-size: 1em;
+    font-weight: 500;
+}
+.navbar-nav a:hover {
+    color: #007bff; /* ホバー時の色 */
+    text-decoration: none;
+}
+
+
 /* --- テーブルのスタイル --- */
 table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 1.5em;
 }
-
 th, td {
     border: 1px solid #ddd;
     padding: 12px;
     text-align: left;
     vertical-align: middle;
 }
-
 th {
     background-color: #f9f9f9;
     font-weight: 600;
 }
-
 tr:nth-child(even) {
     background-color: #fdfdfd;
 }
-
 .danger { background-color: #ffebee !important; }
 .warning { background-color: #e3f2fd !important; }
 
@@ -106,28 +147,53 @@ input[type="text"], input[type="number"], select {
     width: 80px;
     padding: 4px;
 }
+.search-form {
+    margin-top: 1.5em;
+    margin-bottom: 1.5em;
+    display: flex;
+    gap: 10px;
+}
+.search-form input[type="search"] {
+    flex-grow: 1;
+}
+.search-form button {
+    width: auto;
+}
 
-/* --- ▼▼▼ レスポンシブ対応 ▼▼▼ --- */
+/* --- フッターのスタイル --- */
+.footer {
+    background-color: #f8f9fa;
+    color: #6c757d;
+    padding: 2em 0;
+    margin-top: 2em;
+    border-top: 1px solid #dee2e6;
+    text-align: center;
+}
 
-/* テーブルを横スクロール可能にするためのコンテナ */
+/* --- レスポンシブ対応 --- */
 .table-container {
     overflow-x: auto;
     width: 100%;
     -webkit-overflow-scrolling: touch;
 }
-
-/* 画面幅が768px以下（タブレットやスマホ）の場合に適用 */
 @media (max-width: 768px) {
-    html {
-        font-size: 16px;
-    }
     body {
         padding: 0.5em;
-        -webkit-text-size-adjust: 100%;
+        padding-top: 120px; /* 固定ヘッダーの高さ分 */
     }
     .container {
         padding: 1em;
         box-shadow: none;
+    }
+    .navbar .container {
+        flex-direction: column;
+        padding: 0 1em;
+    }
+    .navbar-brand {
+        margin-bottom: 1em;
+    }
+    html {
+        font-size: 16px;
     }
     h1 { font-size: 1.6rem; }
     h2 { font-size: 1.3rem; }
@@ -135,83 +201,15 @@ input[type="text"], input[type="number"], select {
         font-size: 0.95rem;
         padding: 14px 8px;
     }
-    input[type="text"], 
-    input[type="number"], 
-    select,
-    .btn,
-    button {
+    input, select, .btn, button {
         width: 100%;
         box-sizing: border-box;
         font-size: 1rem;
         padding: 12px;
     }
-    .actions form {
+    .actions form, .actions .btn-edit {
         display: block;
         margin-bottom: 0.5em;
-    }
-    .actions .btn-edit {
-        display: block;
         text-align: center;
-        margin-bottom: 0.5em;
-    }
-}
-/* --- ▼▼▼ ナビゲーションバーのスタイル ▼▼▼ --- */
-.navbar {
-    background-color: #343a40;
-    padding: 1rem;
-    border-bottom: 3px solid #007bff;
-}
-.navbar .container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-.navbar-brand {
-    color: #fff;
-    font-size: 1.5em;
-    font-weight: bold;
-    text-decoration: none;
-}
-.navbar-nav {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-}
-.navbar-nav li {
-    margin-left: 15px;
-}
-.navbar-nav a {
-    color: #f8f9fa;
-    text-decoration: none;
-    font-size: 1em;
-}
-.navbar-nav a:hover {
-    color: #007bff;
-}
-
-/* --- ▼▼▼ メインコンテンツとフッターのスタイル ▼▼▼ --- */
-main.container {
-    margin-top: 2em;
-    margin-bottom: 4em;
-}
-.footer {
-    background-color: #f8f9fa;
-    color: #6c757d;
-    padding: 2em 0;
-    border-top: 1px solid #dee2e6;
-    text-align: center;
-    position: relative;
-    bottom: 0;
-    width: 100%;
-}
-
-/* スマホ用のナビゲーションバースタイル */
-@media (max-width: 768px) {
-    .navbar .container {
-        flex-direction: column;
-    }
-    .navbar-brand {
-        margin-bottom: 1em;
     }
 }
