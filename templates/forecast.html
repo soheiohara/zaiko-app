@@ -24,6 +24,7 @@
         <h3>消費予定数を入力してください</h3>
         <p>日ごとの発送予定数をカレンダーに入力し、「再計算」ボタンを押してください。</p>
         
+        {# ▼▼▼ ここにテーブルが復活します ▼▼▼ #}
         <div class="table-container">
             <table>
                 <thead>
@@ -47,7 +48,13 @@
                     <tr class="{{ row_class }}">
                         <td>{{ day.date_str }}</td>
                         <td>{{ day.weekday }}</td>
-                        <td>{{ day.event }}</td>
+                        <td>
+                            {% if day.delivery > 0 %}
+                                <span style="color:blue;">{{ day.event }}</span>
+                            {% else %}
+                                {{ day.event }}
+                            {% endif %}
+                        </td>
                         <td><input type="number" name="consumption-{{ day.date_iso }}" value="{{ day.consumption }}" class="input-small"></td>
                         <td><input type="number" name="delivery-{{ day.date_iso }}" value="{{ day.delivery }}" class="input-small"></td>
                         <td><strong>{{ day.end_stock }}</strong></td>
@@ -59,4 +66,67 @@
         <br>
         <button type="submit" class="btn">再計算して予測を更新</button>
     </form>
+
+    <div style="margin-top: 3em;">
+        <h2>在庫推移グラフ</h2>
+        <canvas id="inventoryChart"></canvas>
+    </div>
+{% endblock %}
+
+
+{% block scripts %}
+<script>
+    // Pythonから渡された予測データをJavaScriptの変数に変換
+    const forecastData = {{ forecast_days | tojson }};
+    const itemData = {{ item.to_dict() | tojson }};
+
+    // グラフ描画のための準備
+    const labels = forecastData.map(day => day.date_str);
+    const stockData = forecastData.map(day => day.end_stock);
+    
+    const lowerThreshold = itemData.lower_threshold;
+    const upperThreshold = itemData.upper_threshold;
+
+    // グラフを描画するキャンバスを取得
+    const ctx = document.getElementById('inventoryChart').getContext('2d');
+
+    // Chart.jsでグラフを作成
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: '予測在庫数',
+                    data: stockData,
+                    borderColor: 'rgb(75, 192, 192)',
+                    tension: 0.1,
+                    fill: false
+                },
+                {
+                    label: '下限閾値',
+                    data: Array(labels.length).fill(lowerThreshold),
+                    borderColor: 'rgb(255, 99, 132)',
+                    borderDash: [5, 5],
+                    pointRadius: 0
+                },
+                {
+                    label: '上限閾値',
+                    data: Array(labels.length).fill(upperThreshold),
+                    borderColor: 'rgb(54, 162, 235)',
+                    borderDash: [5, 5],
+                    pointRadius: 0
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
 {% endblock %}

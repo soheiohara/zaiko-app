@@ -26,6 +26,15 @@ class Inventory(db.Model):
     delivery_interval = db.Column(db.String(20))
     delivery_day = db.Column(db.Integer)
     delivery_amount = db.Column(db.Integer)
+   
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'item_name': self.item_name,
+            'quantity': self.quantity,
+            'lower_threshold': self.lower_threshold,
+            'upper_threshold': self.upper_threshold
+        }
 
 class ForecastOverride(db.Model):
     id = db.Column(db.Integer, primary_key=True)
