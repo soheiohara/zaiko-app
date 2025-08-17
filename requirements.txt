@@ -1,14 +1,4 @@
-blinker
-click
-colorama
 Flask
 Flask-SQLAlchemy
-itsdangerous
-Jinja2
-MarkupSafe
-SQLAlchemy
-typing-extensions
-tzdata
-Werkzeug
 gunicorn
-psycopg2-binary==2.9.9
+psycopg
